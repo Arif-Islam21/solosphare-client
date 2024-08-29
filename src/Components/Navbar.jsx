@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import logo from "../assets/images/logo.png";
-// import { AuthContext } from "../providers/AuthProvider";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Providers/AuthProvider";
 const Navbar = () => {
-  //   const { user, logOut } = useContext(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   return (
     <div className="navbar bg-base-100 shadow-sm container px-4 mx-auto">
       <div className="flex-1">
@@ -18,13 +18,13 @@ const Navbar = () => {
             <Link to="/">Home</Link>
           </li>
 
-          {/* {!user && (
+          {!user && (
             <li>
               <Link to="/login">Login</Link>
             </li>
-          )} */}
+          )}
         </ul>
-        {/* 
+
         {user && (
           <div className="dropdown dropdown-end z-50">
             <div
@@ -68,7 +68,7 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-        )} */}
+        )}
       </div>
     </div>
   );
