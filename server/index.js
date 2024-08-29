@@ -29,6 +29,13 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
 
+    const jobCollection = client.db("soloSphere").collection("job");
+
+    app.post("/job", async (req, res) => {
+      const jobData = req.body;
+      const result = await jobCollection.insertOne(jobData);
+      res.send(result);
+    });
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
