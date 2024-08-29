@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import bgImg from "../../assets/images/login.jpg";
 import logo from "../../assets/images/logo.png";
-import { useContext } from "react";
 import toast from "react-hot-toast";
+import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
 const Login = () => {
   const navigate = useNavigate();
   const { signIn, signInWithGoogle } = useContext(AuthContext);
-
+  console.log(signIn);
   // Google Signin
   const handleGoogleSignIn = async () => {
     try {
@@ -97,7 +97,7 @@ const Login = () => {
 
             <span className="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
           </div>
-          <form onSubmit={handleSignIn}>
+          <form>
             <div className="mt-4">
               <label
                 className="block mb-2 text-sm font-medium text-gray-600 "
@@ -134,6 +134,7 @@ const Login = () => {
             </div>
             <div className="mt-6">
               <button
+                onClick={handleSignIn}
                 type="submit"
                 className="w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50"
               >
