@@ -7,7 +7,12 @@ const port = process.env.PORT || 5000;
 const app = express();
 
 // middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: ["https://solosphere-f4c02.web.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // soloSphere
