@@ -1,4 +1,23 @@
+import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
+
 const MyPostedJobs = () => {
+  const [postedJobs, setPostedJobs] = useState({});
+  const { user } = useContext(AuthContext);
+
+  useEffect(() => {
+    jobData();
+  }, [user]);
+  console.log(postedJobs);
+
+  const jobData = async () => {
+    const { data } = await axios.get(
+      `${import.meta.env.VITE_API_URL}/jobs/${user?.email}`
+    );
+    setPostedJobs(data);
+  };
+
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">
