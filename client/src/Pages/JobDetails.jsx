@@ -29,7 +29,16 @@ const JobDetails = () => {
     const email = form.email.value;
     const comment = form.comment.value;
     const deadline = startDate;
-    const bidData = { price, email, comment, deadline };
+    const status = "pending";
+    const bidData = {
+      price,
+      email,
+      comment,
+      deadline,
+      job_title,
+      category,
+      status,
+    };
     try {
       const data = await axios.post(
         `${import.meta.env.VITE_API_URL}/bid`,
