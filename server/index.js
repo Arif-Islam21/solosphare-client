@@ -9,7 +9,7 @@ const app = express();
 // middleware
 app.use(
   cors({
-    origin: ["https://solosphere-f4c02.web.app"],
+    origin: ["https://solosphere-f4c02.web.app", "http://localhost:5173"],
     credentials: true,
   })
 );
