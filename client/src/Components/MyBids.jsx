@@ -1,4 +1,22 @@
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Providers/AuthProvider";
+import axios from "axios";
+
 const MyBids = () => {
+  const [bids, setBids] = useState([]);
+  const { user } = useContext(AuthContext);
+
+  const bidsData = async () => {
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/bid/${user?.email}`)
+      .then((res) => setBids(res.data));
+  };
+
+  useEffect(() => {
+    bidsData();
+  }, [user]);
+  console.log(bids);
+
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">

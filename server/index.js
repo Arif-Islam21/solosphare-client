@@ -66,10 +66,21 @@ async function run() {
     });
 
     // working with bid data
+    app.get("/bid", async (req, res) => {
+      const result = await bidCollection.find().toArray();
+      res.send(result);
+    });
 
     app.post("/bid", async (req, res) => {
       const data = req.body;
       const result = await bidCollection.insertOne(data);
+      res.send(result);
+    });
+
+    app.get("/bid/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await bidCollection.find(query).toArray();
       res.send(result);
     });
 
