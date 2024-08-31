@@ -134,6 +134,7 @@ const BidRequests = () => {
                         <div className="flex items-center gap-x-6">
                           {/* Accept button */}
                           <button
+                            disabled={bid?.status === "Completed"}
                             onClick={() =>
                               handleBidStatus(
                                 bid._id,
@@ -160,6 +161,7 @@ const BidRequests = () => {
                           </button>
                           {/* Reject BUtton */}
                           <button
+                            disabled={bid?.status === "Completed"}
                             onClick={() =>
                               handleBidStatus(bid._id, bid.status, "Rejected")
                             }
