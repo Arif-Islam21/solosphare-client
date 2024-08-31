@@ -95,6 +95,17 @@ async function run() {
       const result = await bidCollection.insertOne(data);
       res.send(result);
     });
+    // update bid status
+    app.patch("/bid/:id", async (req, res) => {
+      const id = req.params.id;
+      const status = req.body;
+      const query = { _id: new ObjectId(id) };
+      const updatedDoc = {
+        $set: status,
+      };
+      const result = await bidCollection.updateOne(query, updatedDoc);
+      res.send(result);
+    });
 
     app.get("/bid/:email", async (req, res) => {
       const email = req.params.email;

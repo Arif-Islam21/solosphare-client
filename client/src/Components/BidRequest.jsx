@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../Providers/AuthProvider";
+import toast from "react-hot-toast";
 
 const BidRequests = () => {
   const { user } = useContext(AuthContext);
@@ -16,7 +17,16 @@ const BidRequests = () => {
 
   useEffect(() => {
     getRequestData();
-  }, []);
+  }, [user]);
+
+  const handleBidStatus = (id, prevStatus, status) => {
+    if (prevStatus === status)
+      return toast.error("Your status is already same");
+    axios
+      .patch(`${import.meta.env.VITE_API_URL}/bid/${id}`, { status })
+      .then((res) => console.log(res.data));
+    getRequestData();
+  };
 
   return (
     <section className="container px-4 mx-auto pt-12">
@@ -122,7 +132,17 @@ const BidRequests = () => {
                       </td>
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
                         <div className="flex items-center gap-x-6">
-                          <button className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none">
+                          {/* Accept button */}
+                          <button
+                            onClick={() =>
+                              handleBidStatus(
+                                bid._id,
+                                bid.status,
+                                "In Progress"
+                              )
+                            }
+                            className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
@@ -138,8 +158,13 @@ const BidRequests = () => {
                               />
                             </svg>
                           </button>
-
-                          <button className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none">
+                          {/* Reject BUtton */}
+                          <button
+                            onClick={() =>
+                              handleBidStatus(bid._id, bid.status, "Rejected")
+                            }
+                            className="text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               fill="none"
