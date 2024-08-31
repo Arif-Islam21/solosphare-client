@@ -11,6 +11,7 @@ import {
   signOut,
   updateProfile,
 } from "firebase/auth";
+import axios from "axios";
 // import {
 //   GoogleAuthProvider,
 //   createUserWithEmailAndPassword,
@@ -48,6 +49,9 @@ const AuthProvider = ({ children }) => {
 
   const logOut = async () => {
     setLoading(true);
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/logout`, { withCredentials: true })
+      .then((res) => console.log(res.data));
     return signOut(auth);
   };
 
