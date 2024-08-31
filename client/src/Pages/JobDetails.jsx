@@ -27,6 +27,9 @@ const JobDetails = () => {
     const form = e.target;
     const price = form.price.value;
     const email = form.email.value;
+    if (email === user?.email) {
+      return toast.error("invalid user");
+    }
     const comment = form.comment.value;
     const deadline = startDate;
     const status = "pending";

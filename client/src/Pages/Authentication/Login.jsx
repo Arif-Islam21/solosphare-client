@@ -7,7 +7,7 @@ import { AuthContext } from "../../Providers/AuthProvider";
 const Login = () => {
   const navigate = useNavigate();
   const { signIn, signInWithGoogle } = useContext(AuthContext);
-  console.log(signIn);
+
   // Google Signin
   const handleGoogleSignIn = async () => {
     try {
@@ -147,7 +147,7 @@ const Login = () => {
             <span className="w-1/5 border-b  md:w-1/4"></span>
 
             <Link
-              to="/registration"
+              to="/register"
               className="text-xs text-gray-500 uppercase  hover:underline"
             >
               or sign up

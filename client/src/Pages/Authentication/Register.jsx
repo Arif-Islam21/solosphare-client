@@ -22,7 +22,7 @@ const Register = () => {
       const result = await createUser(email, pass);
       console.log(result);
       await updateUserProfile(name, photo);
-      setUser({ ...user, photoURL: photo, displayName: name });
+      setUser({ ...user, photoURL: photo, displayName: name, email: email });
       navigate("/");
       toast.success("Signup Successful");
     } catch (err) {
