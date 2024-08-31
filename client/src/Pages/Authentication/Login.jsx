@@ -16,7 +16,16 @@ const Login = () => {
   // Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      const jwtUser = result.user.email;
+      axios
+        .post(
+          `${import.meta.env.VITE_API_URL}/jwt`,
+          { jwtUser },
+          { withCredentials: true }
+        )
+        .then((res) => console.log(res.data));
+
       toast.success("Signin Successful");
       navigate("/");
     } catch (err) {
