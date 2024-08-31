@@ -24,12 +24,12 @@ const JobDetails = () => {
 
   const handleBidSubmit = async (e) => {
     e.preventDefault();
+    if (user?.email === buyer?.email) {
+      return toast.error("bid not placed");
+    }
     const form = e.target;
     const price = form.price.value;
     const email = form.email.value;
-    if (email === user?.email) {
-      return toast.error("invalid user");
-    }
     const comment = form.comment.value;
     const deadline = startDate;
     const status = "pending";
