@@ -41,6 +41,7 @@ const JobDetails = () => {
       job_title,
       category,
       status,
+      buyer,
     };
     try {
       const data = await axios.post(
