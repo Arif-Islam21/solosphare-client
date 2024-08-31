@@ -4,6 +4,7 @@ import logo from "../../assets/images/logo.png";
 import toast from "react-hot-toast";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProvider";
+import axios from "axios";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -30,11 +31,19 @@ const Login = () => {
     const form = e.target;
     const email = form.email.value;
     const pass = form.password.value;
-    console.log({ email, pass });
     try {
       //User Login
       const result = await signIn(email, pass);
-      console.log(result);
+      console.log(result.user.email);
+      const jwtUser = result.user.email;
+      axios
+        .post(
+          `${import.meta.env.VITE_API_URL}/jwt`,
+          { jwtUser },
+          { withCredentials: true }
+        )
+        .then((res) => console.log(res.data));
+
       navigate(from || "/");
       toast.success("Signin Successful");
     } catch (err) {
