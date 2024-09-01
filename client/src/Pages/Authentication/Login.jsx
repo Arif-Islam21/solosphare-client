@@ -2,13 +2,12 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import bgImg from "../../assets/images/login.jpg";
 import logo from "../../assets/images/logo.png";
 import toast from "react-hot-toast";
-import { useContext } from "react";
-import { AuthContext } from "../../Providers/AuthProvider";
 import axios from "axios";
+import useAuth from "../../Hook/useAuth";
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { signIn, signInWithGoogle } = useContext(AuthContext);
+  const { signIn, signInWithGoogle } = useAuth();
 
   const from = location.state;
   console.log(from);

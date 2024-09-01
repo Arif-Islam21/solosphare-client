@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../Providers/AuthProvider";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import useAuth from "../Hook/useAuth";
 
 const MyBids = () => {
   const [bids, setBids] = useState([]);
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
 
   const bidsData = async () => {
     axios

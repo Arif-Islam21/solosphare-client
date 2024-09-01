@@ -1,10 +1,10 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../Providers/AuthProvider";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import useAuth from "../Hook/useAuth";
 
 const BidRequests = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [bidRequest, setBidRequest] = useState([]);
 
   const getRequestData = () => {
