@@ -9,7 +9,9 @@ const BidRequests = () => {
 
   const getRequestData = () => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/bidRequests/${user?.email}`)
+      .get(`${import.meta.env.VITE_API_URL}/bidRequests/${user?.email}`, {
+        withCredentials: true,
+      })
       .then((res) => {
         setBidRequest(res.data);
       });
@@ -23,7 +25,11 @@ const BidRequests = () => {
     if (prevStatus === status)
       return toast.error("Your status is already same");
     axios
-      .patch(`${import.meta.env.VITE_API_URL}/bid/${id}`, { status })
+      .patch(
+        `${import.meta.env.VITE_API_URL}/bid/${id}`,
+        { status },
+        { withCredentials: true }
+      )
       .then((res) => console.log(res.data));
     getRequestData();
   };

@@ -91,25 +91,25 @@ async function run() {
     });
 
     // get data from the db and use it
-    app.get("/job", async (req, res) => {
+    app.get("/job", verifyToken, async (req, res) => {
       const result = await jobCollection.find().toArray();
       res.send(result);
     });
 
-    app.get("/job/:id", async (req, res) => {
+    app.get("/job/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await jobCollection.findOne(query);
       res.send(result);
     });
 
-    app.post("/job", async (req, res) => {
+    app.post("/job", verifyToken, async (req, res) => {
       const jobData = req.body;
       const result = await jobCollection.insertOne(jobData);
       res.send(result);
     });
 
-    app.put("/job/:id", async (req, res) => {
+    app.put("/job/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const jobData = req.body;
       const query = { _id: new ObjectId(id) };
@@ -123,7 +123,7 @@ async function run() {
       res.send(result);
     });
 
-    app.delete("/job/:id", async (req, res) => {
+    app.delete("/job/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await jobCollection.deleteOne(query);
@@ -131,18 +131,18 @@ async function run() {
     });
 
     // working with bid data
-    app.get("/bid", async (req, res) => {
+    app.get("/bid", verifyToken, async (req, res) => {
       const result = await bidCollection.find().toArray();
       res.send(result);
     });
 
-    app.post("/bid", async (req, res) => {
+    app.post("/bid", verifyToken, async (req, res) => {
       const data = req.body;
       const result = await bidCollection.insertOne(data);
       res.send(result);
     });
     // update bid status
-    app.patch("/bid/:id", async (req, res) => {
+    app.patch("/bid/:id", verifyToken, async (req, res) => {
       const id = req.params.id;
       const status = req.body;
       const query = { _id: new ObjectId(id) };
@@ -153,7 +153,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/bid/:email", async (req, res) => {
+    app.get("/bid/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const result = await bidCollection.find(query).toArray();
@@ -161,7 +161,7 @@ async function run() {
     });
 
     // get all the bid requests
-    app.get("/bidRequests/:email", async (req, res) => {
+    app.get("/bidRequests/:email", verifyToken, async (req, res) => {
       const email = req.params.email;
       const query = { "buyer.email": email };
       const result = await bidCollection.find(query).toArray();

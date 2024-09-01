@@ -8,14 +8,20 @@ const MyBids = () => {
 
   const bidsData = async () => {
     axios
-      .get(`${import.meta.env.VITE_API_URL}/bid/${user?.email}`)
+      .get(`${import.meta.env.VITE_API_URL}/bid/${user?.email}`, {
+        withCredentials: true,
+      })
       .then((res) => setBids(res.data));
   };
 
   const handleBidStatus = (id) => {
-    const { data } = axios.patch(`${import.meta.env.VITE_API_URL}/bid/${id}`, {
-      status: "Completed",
-    });
+    const { data } = axios.patch(
+      `${import.meta.env.VITE_API_URL}/bid/${id}`,
+      {
+        status: "Completed",
+      },
+      { withCredentials: true }
+    );
     console.log(data);
     bidsData();
   };

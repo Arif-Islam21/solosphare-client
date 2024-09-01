@@ -20,10 +20,14 @@ const MyPostedJobs = () => {
 
   const handleDeleteJob = async (id) => {
     try {
-      axios.delete(`${import.meta.env.VITE_API_URL}/job/${id}`).then((res) => {
-        console.log(res.data);
-        jobData();
-      });
+      axios
+        .delete(`${import.meta.env.VITE_API_URL}/job/${id}`, {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.data);
+          jobData();
+        });
       toast.success("Deleted Successfully");
     } catch (error) {
       toast.error(error.message);

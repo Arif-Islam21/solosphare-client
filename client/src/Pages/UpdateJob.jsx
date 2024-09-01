@@ -47,7 +47,9 @@ const UpdateJob = () => {
     };
     try {
       axios
-        .put(`${import.meta.env.VITE_API_URL}/job/${_id}`, updateDoc)
+        .put(`${import.meta.env.VITE_API_URL}/job/${_id}`, updateDoc, {
+          withCredentials: true,
+        })
         .then((res) => console.log(res.data));
       toast.success("Job data updated successfully");
       navigate("/myPostedJob");

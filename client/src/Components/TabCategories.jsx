@@ -8,7 +8,9 @@ const TabCategories = () => {
   const [jobs, setJobs] = useState([]);
   useEffect(() => {
     const getData = async () => {
-      const { data } = await axios(`${import.meta.env.VITE_API_URL}/job`);
+      const { data } = await axios(`${import.meta.env.VITE_API_URL}/job`, {
+        withCredentials: true,
+      });
       setJobs(data);
     };
     getData();

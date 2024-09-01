@@ -37,7 +37,8 @@ const AddJob = () => {
     try {
       const data = await axios.post(
         `${import.meta.env.VITE_API_URL}/job`,
-        jobData
+        jobData,
+        { withCredentials: true }
       );
       console.log(data.data);
       toast.success("Job Data Updated Successfully!");
