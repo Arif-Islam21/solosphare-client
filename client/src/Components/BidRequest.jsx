@@ -2,12 +2,18 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../Hook/useAuth";
-import { useQuery } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import useAxiosSecure from "../Hook/useAxiosSecure";
 
 const BidRequests = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
   // const [bidRequest, setBidRequest] = useState([]);
 
   const {
@@ -15,9 +21,23 @@ const BidRequests = () => {
     error,
     isError,
     isLoading,
+    refetch,
   } = useQuery({
     queryFn: () => getRequestData(),
     queryKey: ["bids"],
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ id, status }) => {
+      const { data } = axiosSecure.patch(`/bid/${id}`, { status });
+      console.log(data);
+      return data;
+    },
+    onSuccess: () => {
+      toast.success("Wow, data updated");
+      // refetch();
+      queryClient.invalidateQueries({ queryKey: ["bids"] });
+    },
   });
 
   const getRequestData = async () => {
@@ -25,18 +45,20 @@ const BidRequests = () => {
     return data;
   };
 
-  useEffect(() => {
-    getRequestData();
-  }, [user]);
+  // useEffect(() => {
+  //   getRequestData();
+  // }, [user]);
 
-  const handleBidStatus = (id, prevStatus, status) => {
+  const handleBidStatus = async (id, prevStatus, status) => {
     if (prevStatus === status)
       return toast.error("Your status is already same");
-    axiosSecure
-      .patch(`/bid/${id}`, { status })
-      .then((res) => console.log(res.data));
-    getRequestData();
+
+    await mutateAsync({ id, status });
   };
+
+  if (isLoading) {
+    return <p>Data is still loading....</p>;
+  }
 
   return (
     <section className="container px-4 mx-auto pt-12">
