@@ -16,12 +16,22 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(cookieParser());
 
 // custom middleware
-// const verifyToken = async (req, res, next) => {
-//   console.log("hello from middleware", req.query);
-//   next();
-// };
+const verifyToken = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({ message: "Unauthorized access" });
+    }
+    req.user = decoded;
+    next();
+  });
+};
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.n7e36sw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -69,8 +79,12 @@ async function run() {
     });
 
     // jobs by my posted jobs
-    app.get("/jobs/:email", async (req, res) => {
+    app.get("/jobs/:email", verifyToken, async (req, res) => {
+      const tokenEmail = req.user.jwtUser;
       const email = req.params.email;
+      if (tokenEmail !== email) {
+        return res.status(403).send({ message: "forbidden access" });
+      }
       const query = { "buyer.email": email };
       const result = await jobCollection.find(query).toArray();
       res.send(result);

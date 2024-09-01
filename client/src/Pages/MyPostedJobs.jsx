@@ -13,9 +13,9 @@ const MyPostedJobs = () => {
   }, [user]);
 
   const jobData = async () => {
-    await axios(`${import.meta.env.VITE_API_URL}/jobs/${user?.email}`).then(
-      (res) => setPostedJobs(res.data)
-    );
+    await axios(`${import.meta.env.VITE_API_URL}/jobs/${user?.email}`, {
+      withCredentials: true,
+    }).then((res) => setPostedJobs(res.data));
   };
 
   const handleDeleteJob = async (id) => {
