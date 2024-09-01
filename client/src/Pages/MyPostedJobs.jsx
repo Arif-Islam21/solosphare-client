@@ -3,37 +3,52 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import useAuth from "../Hook/useAuth";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useAxiosSecure from "../Hook/useAxiosSecure";
 
 const MyPostedJobs = () => {
-  const [postedJobs, setPostedJobs] = useState([]);
+  // const [postedJobs, setPostedJobs] = useState([]);
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    jobData();
-  }, [user]);
+  const { data: postedJobs = [], isLoading } = useQuery({
+    queryFn: () => jobData(),
+    queryKey: ["postedJob"],
+  });
+
+  // useEffect(() => {
+  //   jobData();
+  // }, [user]);
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ id }) => {
+      try {
+        const { data } = await axiosSecure.delete(`/job/${id}`);
+        console.log(data);
+        toast.success("Deleted Successfully");
+        return data;
+      } catch (error) {
+        toast.error(error.message);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["postedJob"] });
+    },
+  });
 
   const jobData = async () => {
-    await axios(`${import.meta.env.VITE_API_URL}/jobs/${user?.email}`, {
-      withCredentials: true,
-    }).then((res) => setPostedJobs(res.data));
+    const { data } = await axiosSecure(`/jobs/${user?.email}`);
+    return data;
   };
 
   const handleDeleteJob = async (id) => {
-    try {
-      axios
-        .delete(`${import.meta.env.VITE_API_URL}/job/${id}`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res.data);
-          jobData();
-        });
-      toast.success("Deleted Successfully");
-    } catch (error) {
-      toast.error(error.message);
-    }
+    await mutateAsync({ id });
   };
 
+  if (isLoading) {
+    return <p>Data is loading...</p>;
+  }
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">
