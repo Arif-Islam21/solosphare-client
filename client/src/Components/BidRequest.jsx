@@ -3,19 +3,26 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useAuth from "../Hook/useAuth";
 import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../Hook/useAxiosSecure";
 
 const BidRequests = () => {
   const { user } = useAuth();
-  const [bidRequest, setBidRequest] = useState([]);
+  const axiosSecure = useAxiosSecure();
+  // const [bidRequest, setBidRequest] = useState([]);
 
-  const getRequestData = () => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/bidRequests/${user?.email}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setBidRequest(res.data);
-      });
+  const {
+    data: bidRequest = [],
+    error,
+    isError,
+    isLoading,
+  } = useQuery({
+    queryFn: () => getRequestData(),
+    queryKey: ["bids"],
+  });
+
+  const getRequestData = async () => {
+    const { data } = await axiosSecure.get(`/bidRequests/${user?.email}`);
+    return data;
   };
 
   useEffect(() => {
@@ -25,12 +32,8 @@ const BidRequests = () => {
   const handleBidStatus = (id, prevStatus, status) => {
     if (prevStatus === status)
       return toast.error("Your status is already same");
-    axios
-      .patch(
-        `${import.meta.env.VITE_API_URL}/bid/${id}`,
-        { status },
-        { withCredentials: true }
-      )
+    axiosSecure
+      .patch(`/bid/${id}`, { status })
       .then((res) => console.log(res.data));
     getRequestData();
   };

@@ -15,7 +15,7 @@ const useAxiosSecure = () => {
   // response interceptor
   axiosSecure.interceptors.response.use(
     (res) => {
-      console.log(`I am checking your error from axios interceptor`, res);
+      // console.log(`I am checking your error from axios interceptor`, res);
       return res;
     },
     async (err) => {
