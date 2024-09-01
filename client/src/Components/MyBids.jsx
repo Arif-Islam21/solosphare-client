@@ -2,36 +2,45 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../Hook/useAuth";
 import useAxiosSecure from "../Hook/useAxiosSecure";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const MyBids = () => {
-  const [bids, setBids] = useState([]);
+  // const [bids, setBids] = useState([]);
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const axiosSecure = useAxiosSecure();
 
-  // const bidsData = async () => {
-  //   axios
-  //     .get(`${import.meta.env.VITE_API_URL}/bid/${user?.email}`, {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => setBids(res.data));
-  // };
+  const { data: bids = [] } = useQuery({
+    queryFn: () => bidsData(),
+    queryKey: ["myBid"],
+  });
+
+  const { mutateAsync } = useMutation({
+    mutationFn: async ({ id }) => {
+      const { data } = await axiosSecure.patch(`/bid/${id}`, {
+        status: "Completed",
+      });
+      console.log(data);
+      return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["muBid"] });
+    },
+  });
 
   const bidsData = async () => {
     const { data } = await axiosSecure(`/bid/${user?.email}`);
-    setBids(data);
+    // setBids(data);
+    return data;
   };
 
-  const handleBidStatus = (id) => {
-    const { data } = axiosSecure.patch(`/bid/${id}`, {
-      status: "Completed",
-    });
-    console.log(data);
-    bidsData();
+  const handleBidStatus = async (id) => {
+    await mutateAsync({ id });
   };
 
-  useEffect(() => {
-    bidsData();
-  }, [user]);
+  // useEffect(() => {
+  //   bidsData();
+  // }, [user]);
 
   return (
     <section className="container px-4 mx-auto pt-12">
@@ -39,7 +48,7 @@ const MyBids = () => {
         <h2 className="text-lg font-medium text-gray-800 ">My Bids</h2>
 
         <span className="px-3 py-1 text-xs text-blue-600 bg-blue-100 rounded-full ">
-          05 Bid
+          {bids.length} Bid
         </span>
       </div>
 
