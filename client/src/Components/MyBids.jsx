@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import useAuth from "../Hook/useAuth";
+import useAxiosSecure from "../Hook/useAxiosSecure";
 
 const MyBids = () => {
   const [bids, setBids] = useState([]);
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
+  // const bidsData = async () => {
+  //   axios
+  //     .get(`${import.meta.env.VITE_API_URL}/bid/${user?.email}`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => setBids(res.data));
+  // };
 
   const bidsData = async () => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/bid/${user?.email}`, {
-        withCredentials: true,
-      })
-      .then((res) => setBids(res.data));
+    const { data } = await axiosSecure(`/bid/${user?.email}`);
+    setBids(data);
   };
 
   const handleBidStatus = (id) => {
-    const { data } = axios.patch(
-      `${import.meta.env.VITE_API_URL}/bid/${id}`,
-      {
-        status: "Completed",
-      },
-      { withCredentials: true }
-    );
+    const { data } = axiosSecure.patch(`/bid/${id}`, {
+      status: "Completed",
+    });
     console.log(data);
     bidsData();
   };
