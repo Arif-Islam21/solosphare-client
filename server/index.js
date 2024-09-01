@@ -91,12 +91,12 @@ async function run() {
     });
 
     // get data from the db and use it
-    app.get("/job", verifyToken, async (req, res) => {
+    app.get("/job", async (req, res) => {
       const result = await jobCollection.find().toArray();
       res.send(result);
     });
 
-    app.get("/job/:id", verifyToken, async (req, res) => {
+    app.get("/job/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await jobCollection.findOne(query);
