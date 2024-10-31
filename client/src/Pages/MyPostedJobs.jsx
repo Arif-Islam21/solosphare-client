@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../Hook/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosSecure from "../Hook/useAxiosSecure";
+import Loading from "../Components/Loading";
 
 const MyPostedJobs = () => {
   // const [postedJobs, setPostedJobs] = useState([]);
@@ -47,7 +48,7 @@ const MyPostedJobs = () => {
   };
 
   if (isLoading) {
-    return <p>Data is loading...</p>;
+    return <Loading type={"balls"} color={"#ffffff"} />;
   }
   return (
     <section className="container px-4 mx-auto pt-12">
